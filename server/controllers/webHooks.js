@@ -1,18 +1,17 @@
 import { Webhook } from "svix";
-import user from "../Models/user.js";
-import verify  from "jsonwebtoken";
-import json  from "express";
+import User from '../Models/user.js'
+;
 
 // APi controller function for Manage clerck user with DB
-const clerckWebhooks=async(req,res)=>{
+ export const clerckWebhooks=async(req,res)=>{
     try {
         // create svix instace with webhooksecret
         const wHook=new Webhook(process.env.clerck_webhook_secret)
         // verify header
         await wHook.verify(JSON.stringify(req.body),{
-            "svix-id":req.headers["svix-id"],
-            "svix-timestamp":req.headers["svix-timestamp"],
-            "svix-signature":req.headers["svix-signature"]
+            "svix-id": req.headers["svix-id"],
+            "svix-timestamp": req.headers["svix-timestamp"],
+            "svix-signature": req.headers["svix-signature"]
         })
         // getting data from reqBody
         const {data,type}=req.body
@@ -27,7 +26,7 @@ const clerckWebhooks=async(req,res)=>{
                     image:data.image_url,
                     resume:""
                 }
-                await user.create(userData)
+                await User.create(userData)
                 res.json({})
                 break;
             }
@@ -37,12 +36,12 @@ const clerckWebhooks=async(req,res)=>{
                     name:data.first_name + " "+ data.last_name,
                     image:data.image_url,
                 }
-                await user.findByIdAndUpdate(data.id,userData)
+                await User.findByIdAndUpdate(data.id,userData)
                 res.json({})
                 break;
             }
             case 'user.deleted':{
-                await user.findByIdAndDelete(data.id)
+                await User.findByIdAndDelete(data.id)
                 res.json({})
                 break;
             }
@@ -56,5 +55,3 @@ const clerckWebhooks=async(req,res)=>{
         res.json({success:false,message:'webHook Error'})
     }
 }
-
-export default clerckWebhooks
