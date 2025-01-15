@@ -10,7 +10,6 @@ function Home() {
   const navigate=useNavigate()
   return (
     <div>
-      <button className='px-4 py-2 bg-black rounded text-white' onClick={(e)=>navigate('/adminDashboard')}>Admin-dashboard-temp</button>
       <Navbar/>
       <Hero/>
       <JobListing/>
