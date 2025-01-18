@@ -25,7 +25,7 @@ function Navbar() {
   return (
     <div className='shadow py-4'>
       <div className='container px-2 2xl:px-20 mx-auto flex justify-between items-center'>
-        <img onClick={() => navigate('/')} className='cursor-pointer' src={assets.logo} alt="logo" />
+        <img onClick={() => navigate('/')} className='cursor-pointer' style={{height:'80px',padding:'0px'}} src='https://graphicdesignjunction.com/wp-content/uploads/2018/04/colorful_logo_3.jpg' alt="logo" />
         {
           user ? 
           <div className='flex items-center gap-3'>
