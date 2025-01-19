@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { assets } from '../assets/assets'
+import { AppContext } from '../context/AppContext'
 
 
 function AdminDashboard() {
+        const{companyData,setCompanyData,setCompanyToken}=useContext(AppContext)
     const navigate=useNavigate()
+    const logOut=()=>{
+        setCompanyToken(null)
+        localStorage.removeItem('token')
+        setCompanyData(null)
+        navigate('/')
+    }
   return (
     <div className='min-h-screen '>
     {/* Navbar for recruiter panel */}
@@ -17,7 +25,7 @@ function AdminDashboard() {
                     <img className='w-8 border rounded-full' src={assets.company_icon} alt="" />
                     <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12'>
                         <ul className='list-none m-0 p-2 bg-white rounded-md border text-sm'>
-                            <li className='py-1 px-2 cursor-pointer pr-10'>Logout</li>
+                            <li onClick={logOut} className='py-1 px-2 cursor-pointer pr-10'>Logout</li>
                         </ul>
                     </div>
                 </div>

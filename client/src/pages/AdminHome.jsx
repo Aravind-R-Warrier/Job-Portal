@@ -82,6 +82,7 @@ function AdminHome() {
         </div>
 
         <br />
+        
         <div className="bg-white p-4 rounded-lg shadow-md">
   <h2 className="text-xl font-medium mb-4">Monthly Applications</h2>
   <ResponsiveContainer width="100%" height={300}>

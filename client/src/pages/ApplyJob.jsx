@@ -70,10 +70,17 @@ function ApplyJob() {
   };
 
   const checkAlreadyApplied = () => {
-    if (userApplications.some((item) => item.jobId._id === jobsData._id)) {
-      setIsAlreadyApplied(true);
+    if (!jobsData || !userApplications) {
+        return; // Ensure data exists before proceeding
     }
-  };
+
+    const alreadyApplied = userApplications.some(
+        (item) => item.jobId && item.jobId._id === jobsData._id
+    );
+
+    setIsAlreadyApplied(alreadyApplied); // Update state with the result
+};
+
 
   useEffect(() => {
     fetchJob();

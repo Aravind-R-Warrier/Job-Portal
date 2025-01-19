@@ -33,7 +33,7 @@ function AdminLogin() {
                     setAdminToken(data.token);
                     localStorage.setItem('adminToken', data.token);
                     setShowAdminLogin(false);
-                    navigate('/adminDashboard');
+                    navigate('/admin-home');
                 } else {
                     toast.error('Incorrect email or password');
                 }
@@ -50,7 +50,7 @@ function AdminLogin() {
                     setAdminToken(data.token);
                     localStorage.setItem('adminToken', data.token);
                     setShowAdminLogin(false);
-                    navigate('/adminDashboard');
+                    navigate('/admin-home');
                 } else {
                     toast.error(data.message);
                 }
@@ -130,7 +130,7 @@ function AdminLogin() {
                     </>
                 )}
 
-                {state === 'Login' && <p className="text-sm text-blue-600 mt-4 cursor-pointer">Forgot Password</p>}
+                {state === 'Login' && <p className="text-sm text-blue-600 mt-4 cursor-pointer"></p>}
 
                 <button
                     type="submit"
@@ -141,12 +141,12 @@ function AdminLogin() {
 
                 {state === 'Login' ? (
                     <p className="mt-5 text-center">
-                        Don't have an account?{' '}
+            
                         <span
                             className="text-blue-600 cursor-pointer"
                             onClick={() => setState('Sign Up')}
                         >
-                            Sign Up
+                          
                         </span>
                     </p>
                 ) : (
