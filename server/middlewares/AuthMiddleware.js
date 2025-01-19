@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
-import Companay from '../Models/company.js'
+import Companay from '../Models/company.js';
+
 
 export const protectCompany=async(req,res,next)=>{
 const token=req.headers.token
@@ -15,3 +16,7 @@ if(!token){
     }
 }
 }
+
+
+
+

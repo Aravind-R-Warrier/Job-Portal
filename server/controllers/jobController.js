@@ -13,19 +13,26 @@ try {
 
 
 // get a job by id
-export const getJobById=async(req,res)=>{
+export const getJobById = async (req, res) => {
     try {
-        const{id}=req.params
-        const job=await Job.findById(id).populate({
-            path:'companyId',
-            select:"-password"
-        })
-        if(!job){
-            res.json({success:false,message:'job not fount'})
-        }else{
-            res.json({success:true,job})
-        }
+      const { id } = req.params;
+  
+      // Increment the views field
+      await Job.findByIdAndUpdate(id, { $inc: { views: 1 } });
+  
+      // Fetch the job with populated company details
+      const job = await Job.findById(id).populate({
+        path: 'companyId',
+        select: "-password", // Exclude the password field from the company data
+      });
+  
+      if (!job) {
+        return res.json({ success: false, message: 'Job not found' });
+      }
+  
+      res.json({ success: true, job });
     } catch (error) {
-        res.json({success:false,message:error.message})
+      res.json({ success: false, message: error.message });
     }
-}
+  };
+  

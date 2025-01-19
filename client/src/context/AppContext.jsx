@@ -21,7 +21,11 @@ export const AppContextProvider=({children})=>{
     const[companyData,setCompanyData]=useState(null)
     const[userData,setUserData]=useState(null)
     const[userApplications,setUserApplications]=useState([])
-    
+      // State for showing/hiding admin login modal
+
+      // Admin token and data
+      const [adminToken, setAdminToken] = useState(localStorage.getItem('adminToken') || null);
+      const [adminData, setAdminData] = useState(null);
     // function to fetchData
     const fetchJobs=async()=>{
         try {
@@ -116,7 +120,8 @@ useEffect(()=>{
        jobs,setJobs,showRecruiterLogin,setShowRecruiterLogin,
        showAdminLogin,setShowAdminLogin,companyToken,setCompanyToken,
        companyData,setCompanyData,backendUrl,userData,setUserData,userApplications,
-       setUserApplications,fetchUserData,fetchUserApplications
+       setUserApplications,fetchUserData,fetchUserApplications,adminToken, setAdminToken,
+       adminData, setAdminData,getToken,user
     }
 
     return(

@@ -9,6 +9,7 @@ import companyRoutes from './Routes/companyRoutes.js'
 import connectCloudinary from './config/cloudinary.js'
 import jobRoutes from './Routes/jobRoutes.js'
 import userRoutes from './Routes/userRoutes.js'
+import adminRoutes from './Routes/adminRoutes.js'
 import {clerkMiddleware} from '@clerk/express'
 // initialise express
 const app=express()
@@ -28,6 +29,8 @@ app.post('/webhooks',clerckWebhooks)
 app.use('/api/company',companyRoutes)
 app.use('/api/jobs',jobRoutes)
 app.use('/api/users/',userRoutes)
+app.use('/api/admin/',adminRoutes)
+
 
 // port
 const port=process.env.port || 5000

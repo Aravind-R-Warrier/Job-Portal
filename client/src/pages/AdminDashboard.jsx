@@ -10,9 +10,9 @@ function AdminDashboard() {
     {/* Navbar for recruiter panel */}
     <div className='shadow py-4 '>
         <div className='px-5 flex justify-between items-center '>
-            <img onClick={e=>navigate('/')} className='max-sm:w-32 cursor-pointer' src={assets.logo} alt="" />
+        <img onClick={() => navigate('/')} className='cursor-pointer' style={{height:'80px',padding:'0px'}} src='https://graphicdesignjunction.com/wp-content/uploads/2018/04/colorful_logo_3.jpg' alt="logo" />
             <div className='flex items-center gap-3'>
-                <p className='max-sm:hidden'>Welcome,Aravind</p>
+                <p className='max-sm:hidden'>ADMIN_PANEL</p>
                 <div className='relative group'>
                     <img className='w-8 border rounded-full' src={assets.company_icon} alt="" />
                     <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12'>
