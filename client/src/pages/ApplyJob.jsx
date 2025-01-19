@@ -60,7 +60,7 @@ function ApplyJob() {
 
       if (data.success) {
         toast.success(data.message);
-        fetchUserApplications(); // Refresh applications list after applying
+        fetchUserApplications(); 
       } else {
         toast.error(data.message);
       }
@@ -71,14 +71,14 @@ function ApplyJob() {
 
   const checkAlreadyApplied = () => {
     if (!jobsData || !userApplications) {
-        return; // Ensure data exists before proceeding
+        return; 
     }
 
     const alreadyApplied = userApplications.some(
         (item) => item.jobId && item.jobId._id === jobsData._id
     );
 
-    setIsAlreadyApplied(alreadyApplied); // Update state with the result
+    setIsAlreadyApplied(alreadyApplied);
 };
 
 

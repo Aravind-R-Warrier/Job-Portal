@@ -33,7 +33,7 @@ function AdminLogin() {
                     setAdminToken(data.token);
                     localStorage.setItem('adminToken', data.token);
                     setShowAdminLogin(false);
-                    navigate('/admin-home');
+                    navigate('/adminDashboard');
                 } else {
                     toast.error('Incorrect email or password');
                 }
@@ -50,7 +50,7 @@ function AdminLogin() {
                     setAdminToken(data.token);
                     localStorage.setItem('adminToken', data.token);
                     setShowAdminLogin(false);
-                    navigate('/admin-home');
+                    navigate('/adminDashboard');
                 } else {
                     toast.error(data.message);
                 }
