@@ -25,14 +25,24 @@ function AdminHome() {
     }
   };
 
-  // Sample data updated with job details (title, location, level)
-  const applicantStats = jobs.map((job) => ({
-    name: job.title, // Job Title
-    applicants: job.applicants, // Number of applicants (modify as needed)
-    jobViews: job.views || 0, // Job views
-    location: job.location, // Job Location
-    level: job.level, // Job Level
-  }));
+  // Filter jobs with views > 0
+  const viewedJobs = jobs.filter((job) => job.views > 0);
+
+  // Sample data for charts (filtered jobs)
+  const applicantStats = viewedJobs.map((job) => {
+    // Calculate new applicants for each job (you can adjust based on how new applicants are tracked)
+    const newApplicants = userApplications.filter(
+      (app) => app.jobId === job._id && new Date(app.date).getMonth() === new Date().getMonth() // Assuming new applications are for the current month
+    ).length;
+
+    return {
+      name: job.title, // Job Title
+      newApplicants: newApplicants, // New Applicants
+      jobViews: job.views || 0, // Job views
+      location: job.location, // Job Location
+      level: job.level, // Job Level
+    };
+  });
 
   const pieColors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -44,22 +54,22 @@ function AdminHome() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Bar Chart */}
         <div className="bg-white p-4 rounded-lg">
-          <h2 className="text-xl font-medium mb-4">Job Applicants & Views</h2>
-          <ResponsiveContainer width={600} height={300}>
-            <BarChart data={applicantStats}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="applicants" fill="#8884d8" />
-              <Bar dataKey="jobViews" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+  <h2 className="text-xl font-medium mb-4">Job Views</h2>
+  <ResponsiveContainer width={600} height={300}>
+    <BarChart data={applicantStats}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      {/* Only show the Job Views bar */}
+      <Bar dataKey="jobViews" fill="#82ca9d" />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
 
         {/* Pie Chart */}
-        <div className="ml-10 bg-white p-4 rounded-lg">
+        <div className="mt-5 mr-8 p-0 ml-10 bg-white  rounded-lg">
           <ResponsiveContainer width={800} height={400}>
             <PieChart>
               <Pie
@@ -82,42 +92,68 @@ function AdminHome() {
         </div>
 
         <br />
-        
+
+        {/* Line Chart for Monthly Applications */}
         <div className="bg-white p-4 rounded-lg shadow-md">
-  <h2 className="text-xl font-medium mb-4">Monthly Applications</h2>
-  <ResponsiveContainer width="100%" height={300}>
-    <LineChart
-      data={Object.values(
-        userApplications.reduce((acc, app) => {
-          const month = new Date(app.date).toLocaleString('default', { month: 'short' });
-          if (!acc[month]) {
-            acc[month] = { month, newApplications: 0, accepted: 0, rejected: 0 };
-          }
-          acc[month].newApplications += 1;
-          if (app.status === 'Accepted') acc[month].accepted += 1;
-          if (app.status === 'Rejected') acc[month].rejected += 1;
-          return acc;
-        }, {})
-      )}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="month" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line type="monotone" dataKey="newApplications" stroke="#8884d8" name="New Applications" />
-      <Line type="monotone" dataKey="accepted" stroke="#82ca9d" name="Accepted Applications" />
-      <Line type="monotone" dataKey="rejected" stroke="#FF8042" name="Rejected Applications" />
-    </LineChart>
-  </ResponsiveContainer>
-</div>
+          <h2 className="text-xl font-medium mb-4">Monthly Applications</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              data={Object.values(
+                userApplications.reduce((acc, app) => {
+                  const month = new Date(app.date).toLocaleString('default', { month: 'short', year: 'numeric' });
 
+                  if (!acc[month]) {
+                    acc[month] = { month, newApplications: 0, accepted: 0, rejected: 0 };
+                  }
 
+                  // Increment the count for new applications
+                  acc[month].newApplications += 1;
+
+                  // Increment based on the status of the application
+                  if (app.status === 'Accepted') acc[month].accepted += 1;
+                  if (app.status === 'Rejected') acc[month].rejected += 1;
+
+                  return acc;
+                }, {})
+              )}
+            >
+              {/* CartesianGrid and Axis */}
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+
+              {/* Ensure all lines are visible, even with 0 data */}
+              <Line 
+                type="monotone" 
+                dataKey="newApplications" 
+                stroke="#8884d8" 
+                name="New Applications" 
+                dot={false} 
+              />
+              <Line 
+                type="monotone" 
+                dataKey="accepted" 
+                stroke="#82ca9d" 
+                name="Accepted Applications" 
+                dot={false} 
+              />
+              <Line 
+                type="monotone" 
+                dataKey="rejected" 
+                stroke="#FF8042" 
+                name="Rejected Applications" 
+                dot={false} 
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
-      {/* Displaying Job Information */}
+      {/* Displaying Viewed Job Information */}
       <div className="mt-6">
-        <h2 className="text-xl font-medium mb-4">Job Details</h2>
+        <h2 className="text-xl font-medium mb-4">Viewed Job Details</h2>
         <table className="min-w-full bg-white shadow-md rounded-lg">
           <thead>
             <tr>
@@ -128,14 +164,12 @@ function AdminHome() {
             </tr>
           </thead>
           <tbody>
-            {jobs.map((job, index) => (
+            {viewedJobs.map((job, index) => (
               <tr key={index}>
                 <td className="py-3 px-6">{job.title}</td>
                 <td className="py-3 px-6">{job.location}</td>
                 <td className="py-3 px-6">{job.level}</td>
-                <td className="py-3 px-6">{job.views || 0}</td>
-                <td className="py-3 px-6">
-                </td>
+                <td className="py-3 px-6">{job.views}</td>
               </tr>
             ))}
           </tbody>
