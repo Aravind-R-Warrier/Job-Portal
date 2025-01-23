@@ -28,52 +28,52 @@ function AdminHome() {
   // Filter jobs with views > 0
   const viewedJobs = jobs.filter((job) => job.views > 0);
 
-  // Sample data for charts (filtered jobs)
-  const applicantStats = viewedJobs.map((job) => {
-    // Calculate new applicants for each job (you can adjust based on how new applicants are tracked)
-    const newApplicants = userApplications.filter(
-      (app) => app.jobId === job._id && new Date(app.date).getMonth() === new Date().getMonth() // Assuming new applications are for the current month
-    ).length;
+  // Group by category for Pie chart
+  const categoryStats = viewedJobs.reduce((acc, job) => {
+    const category = job.category || 'Uncategorized'; // Default category if none exists
+    if (!acc[category]) {
+      acc[category] = 0;
+    }
+    acc[category] += job.views; // Sum views for each category
+    return acc;
+  }, {});
 
-    return {
-      name: job.title, // Job Title
-      newApplicants: newApplicants, // New Applicants
-      jobViews: job.views || 0, // Job views
-      location: job.location, // Job Location
-      level: job.level, // Job Level
-    };
-  });
+  // Convert the category stats into an array for Pie chart
+  const categoryData = Object.entries(categoryStats).map(([category, views]) => ({
+    name: category,
+    jobViews: views,
+  }));
 
-  const pieColors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const pieColors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6347', '#FFD700'];
 
   return (
     <div className="p-6">
       <h1 className="text-4xl font-semibold mb-6">Dashboard</h1>
 
-      {/* Grid layout with Tailwind CSS */}
+     
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Bar Chart */}
+        {/* Bar Chart for Job Views by Job Title */}
         <div className="bg-white p-4 rounded-lg">
-  <h2 className="text-xl font-medium mb-4">Job Views</h2>
-  <ResponsiveContainer width={600} height={300}>
-    <BarChart data={applicantStats}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      {/* Only show the Job Views bar */}
-      <Bar dataKey="jobViews" fill="#82ca9d" />
-    </BarChart>
-  </ResponsiveContainer>
-</div>
+          <h2 className="text-xl font-medium mb-4">Job Views</h2>
+          <ResponsiveContainer width={500} height={300}>
+            <BarChart data={viewedJobs}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="title" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              {/* Only show the Job Views bar */}
+              <Bar dataKey="views" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
 
-        {/* Pie Chart */}
-        <div className="mt-5 mr-8 p-0 ml-10 bg-white  rounded-lg">
+        {/* Pie Chart for Job Categories */}
+        <div className="mt-5 mr-8 p-0 ml-10 bg-white rounded-lg">
           <ResponsiveContainer width={800} height={400}>
             <PieChart>
               <Pie
-                data={applicantStats}
+                data={categoryData}
                 dataKey="jobViews"
                 nameKey="name"
                 cx="50%"
@@ -82,7 +82,7 @@ function AdminHome() {
                 fill="#8884d8"
                 label
               >
-                {applicantStats.map((entry, index) => (
+                {categoryData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
                 ))}
               </Pie>
@@ -125,26 +125,26 @@ function AdminHome() {
               <Legend />
 
               {/* Ensure all lines are visible, even with 0 data */}
-              <Line 
-                type="monotone" 
-                dataKey="newApplications" 
-                stroke="#8884d8" 
-                name="New Applications" 
-                dot={false} 
+              <Line
+                type="monotone"
+                dataKey="newApplications"
+                stroke="#8884d8"
+                name="New Applications"
+                dot={false}
               />
-              <Line 
-                type="monotone" 
-                dataKey="accepted" 
-                stroke="#82ca9d" 
-                name="Accepted Applications" 
-                dot={false} 
+              <Line
+                type="monotone"
+                dataKey="accepted"
+                stroke="#82ca9d"
+                name="Accepted Applications"
+                dot={false}
               />
-              <Line 
-                type="monotone" 
-                dataKey="rejected" 
-                stroke="#FF8042" 
-                name="Rejected Applications" 
-                dot={false} 
+              <Line
+                type="monotone"
+                dataKey="rejected"
+                stroke="#FF8042"
+                name="Rejected Applications"
+                dot={false}
               />
             </LineChart>
           </ResponsiveContainer>
