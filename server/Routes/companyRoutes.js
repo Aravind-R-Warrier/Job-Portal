@@ -25,7 +25,7 @@ router.get('/list-jobs',protectCompany,getCompanyPostedJobs)
 // get change application status
 router.post('/change-status',protectCompany,changeJobApplicationsStatus)
 
-// get change application status
+// get change application visibility
 router.post('/change-visiblity',protectCompany,changeVisiblity)
 
 

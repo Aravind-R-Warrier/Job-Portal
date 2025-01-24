@@ -33,7 +33,7 @@ function AdminDashboard() {
         </div>
     </div>
     <div className='flex items-start'>
-        {/* left sidebar with options to addjob,managejob,viweApplications */}
+        {/* left sidebar with options to addjob,manageusers,manageRec */}
         <div className='inline-block min-h-screen border-r-2'>
             <ul className='flex flex-col items-start pt-5 text-gray-800'>
                 <NavLink className={({isActive})=>`flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-green-100 border-r-4 border-green-500'}`} to={'/adminDashboard/admin-home'}>

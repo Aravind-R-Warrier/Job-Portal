@@ -25,7 +25,7 @@ function AddJob() {
                 description,
                 location,
                 salary,
-                category, // Changed to 'category'
+                category, 
                 level
             },
                 { headers: { token: companyToken } })

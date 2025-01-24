@@ -143,6 +143,7 @@ export const getCompanyPostedJobs=async(req,res)=>{
 export const changeJobApplicationsStatus=async(req,res)=>{
    try {
     const{id,status}=req.body
+    console.log(id,status)
     // findJobApplicationdata and updatestatus
     await jobApplication.findOneAndUpdate({_id:id},{status})
     res.json({success:true,message:'Status changed'})
@@ -152,21 +153,37 @@ export const changeJobApplicationsStatus=async(req,res)=>{
 }
 
 // chage job Visibility
-export const changeVisiblity=async(req,res)=>{
+export const changeVisiblity = async (req, res) => {
     try {
-        const {id}=req.body
-        const companyId=req.company._id
-
-        const job=await Job.findById(id)
-        
-        if(companyId.toString() === job.companyId.toString()){
-            job.visible !== job.visible
-        }
-       
-        await job.save()
-        res.json({success:true,job})
-
+      const { id } = req.body;
+      const companyId = req.company._id;
+  
+      // Find the job by ID
+      const job = await Job.findById(id);
+  
+      // Check if the job exists
+      if (!job) {
+        return res.status(404).json({ success: false, message: 'Job not found' });
+      }
+  
+      // Verify that the job belongs to the requesting company
+      if (companyId.toString() !== job.companyId.toString()) {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not authorized to modify this job',
+        });
+      }
+  
+      // Toggle the visibility
+      job.visible = !job.visible;
+  
+      // Save the changes
+      await job.save();
+  
+      res.json({ success: true, job, message: 'Job visibility updated successfully' });
     } catch (error) {
-        res.json({success:false,message:error.message})
+      console.error('Error changing visibility:', error);
+      res.status(500).json({ success: false, message: error.message });
     }
-}
+  };
+  
